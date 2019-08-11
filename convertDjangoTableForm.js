@@ -49,16 +49,11 @@ function convertDjangoTableForm() {
         },
 
         bootstrapForm: function(formID, layoutObj) {
-            var hiddenHTML = "";
             $form = $("form#" + formID);
             $form.find("div.div-marker:first").before(this.bootstrapFormLayout($form, layoutObj));
             $form.find("div.control-group > label").addClass("control-label");
             $form.find("div.controls > label").addClass("checkbox");
             $form.find(".helptext").addClass("help-block");
-            $form.find("input[type='hidden']").each(function() {
-                hiddenHTML = hiddenHTML + $(this)[0].outerHTML;
-            });
-            $form.find("div.div-marker:first").before(hiddenHTML);
             $form.find("table:last").remove();
         }
     });
