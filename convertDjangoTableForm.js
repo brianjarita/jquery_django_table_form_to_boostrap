@@ -16,9 +16,9 @@ function convertDjangoTableForm() {
             html = html + '" id="div_' + id + '">';
             if (inputType === "checkbox") {
                 var $input = $tr.find("td input:first");
-                html = html + '<div class="controls">' + $tr.find("th").html().replace("</label>", $input[0].outerHTML + "</label>");
+                html = html + '<div class="controls">' + $tr.find("th").html().replace(":</label>", $input[0].outerHTML + "</label>");
                 $input.remove();
-                html = html + $tr.find("td").html().replace("<br><span", "<span").replace("<span", "<p").replace("</span>", "</p>") + '</div></div>';
+                html = html + $tr.find("td").html().replace("<br><span", "<span").replace("<span", "<p").replace("</span>", "</p>");
             } else {
                 html = html + $tr.find("th").html();
                 html = html + '<div class="controls">' + $tr.find("td").html().replace("<span", "<p").replace("</span>", "</p>");
