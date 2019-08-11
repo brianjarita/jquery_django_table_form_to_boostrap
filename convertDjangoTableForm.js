@@ -6,28 +6,27 @@ function convertDjangoTableForm() {
                 html = '<div class="control-group ',
                 inputType = $tr.find("td input:first").attr("type");
 
-                $tr.find(".errorlist").find("li").each(function() {
-                    errors.push($(this).html());
-                })
-                $tr.find(".errorlist").remove();
-                if (errors.length) {
-                    html = html + " error "
-                }
-                html = html + '" id="div_' + id + '">';
-                if (inputType === "checkbox") {
-                    var $input = $tr.find("td input:first");
-                    console.log($input);
-                    html = html + '<div class="controls">' + $tr.find("th").html().replace("</label>", $input[0].outerHTML + "</label>");
-                    $input.remove();
-                    html = html + $tr.find("td").html().replace("<br><span", "<span").replace("<span", "<p").replace("</span>", "</p>") + '</div></div>';
-                } else {
+            $tr.find(".errorlist").find("li").each(function() {
+                errors.push($(this).html());
+            })
+            $tr.find(".errorlist").remove();
+            if (errors.length) {
+                html = html + " error "
+            }
+            html = html + '" id="div_' + id + '">';
+            if (inputType === "checkbox") {
+                var $input = $tr.find("td input:first");
+                html = html + '<div class="controls">' + $tr.find("th").html().replace("</label>", $input[0].outerHTML + "</label>");
+                $input.remove();
+                html = html + $tr.find("td").html().replace("<br><span", "<span").replace("<span", "<p").replace("</span>", "</p>") + '</div></div>';
+            } else {
                 html = html + $tr.find("th").html();
                 html = html + '<div class="controls">' + $tr.find("td").html().replace("<span", "<p").replace("</span>", "</p>");
-                if (errors.length) {
-                    html = html + '<span class="help-inline"><strong>' + errors.join(" ") + '</strong></span>';
-                }
-                html = html + '</div></div>';
-                }
+            }
+            if (errors.length) {
+                html = html + '<span class="help-inline"><strong>' + errors.join(" ") + '</strong></span>';
+            }
+            html = html + '</div></div>';
             return html;
         },
 
@@ -39,7 +38,7 @@ function convertDjangoTableForm() {
                     if (data.type == "fieldset") {
                         html = html + "<fieldset><legend>" + data.legend + "</legend>" + self.bootstrapFormLayout($form, data.fields) + "</fieldset>";
                     }
-                    else if (data.type == "html") {
+                    else if(data.type === "html") {
                         html = html + data.htmlStart + self.bootstrapFormLayout($form, data.fields) + data.htmlEnd;
                     }
                 } else if (typeof data === "string") {
@@ -50,11 +49,16 @@ function convertDjangoTableForm() {
         },
 
         bootstrapForm: function(formID, layoutObj) {
+            var hiddenHTML = "";
             $form = $("form#" + formID);
             $form.find("div.div-marker:first").before(this.bootstrapFormLayout($form, layoutObj));
             $form.find("div.control-group > label").addClass("control-label");
             $form.find("div.controls > label").addClass("checkbox");
             $form.find(".helptext").addClass("help-block");
+            $form.find("input[type='hidden']").each(function() {
+                hiddenHTML = hiddenHTML + $(this)[0].outerHTML;
+            });
+            $form.find("div.div-marker:first").before(hiddenHTML);
             $form.find("table:last").remove();
         }
     });
